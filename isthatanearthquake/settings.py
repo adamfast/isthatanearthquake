@@ -1,3 +1,4 @@
+import socket
 # Django settings for isthatanearthquake project.
 
 DEBUG = True
@@ -9,16 +10,47 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'isthatanearthquake',                      # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+if socket.gethostname() == 'adam-air':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.contrib.gis.db.backends.postgis', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+            'NAME': 'isthatanearthquake',                      # Or path to database file if using sqlite3.
+            'USER': '',                      # Not used with sqlite3.
+            'PASSWORD': '',                  # Not used with sqlite3.
+            'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+            'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        }
     }
-}
+elif socket.gethostname() == 'adam-air2':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+            'NAME': 'isthatanearthquake',                      # Or path to database file if using sqlite3.
+            'USER': '',                      # Not used with sqlite3.
+            'PASSWORD': '',                  # Not used with sqlite3.
+            'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+            'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        }
+    }
+else:
+    from bundle_config import config
+
+    if "postgres" in config:
+        if "DATABASES" in locals():
+            DATABASES['default'] = {
+                'ENGINE': 'django.contrib.gis.db.backends.postgis',
+#                'ENGINE': "django.db.backends.postgresql_psycopg2",
+                'NAME': config['postgres']['database'],
+                'USER': config['postgres']['username'],
+                'PASSWORD': config['postgres']['password'],
+                'HOST': config['postgres']['host'],
+            }
+        else:
+            DATABASE_ENGINE = "postgresql_psycopg2"
+            DATABASE_NAME = config['postgres']['database']
+            DATABASE_USER = config['postgres']['username']
+            DATABASE_PASSWORD = config['postgres']['password']
+            DATABASE_HOST = config['postgres']['host']
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -118,6 +150,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.admindocs',
+    'quakes',
 )
 
 # A sample logging configuration. The only tangible logging
