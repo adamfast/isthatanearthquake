@@ -53,6 +53,20 @@ else:
             DATABASE_PASSWORD = config['postgres']['password']
             DATABASE_HOST = config['postgres']['host']
 
+    if "redis" in config:
+        CACHES = {
+            'default': {
+                'BACKEND': 'redis_cache.RedisCache',
+                'LOCATION': '%s:%d' % (config['redis']['host'], int(config['redis']['port'])),
+                'OPTIONS': {
+                    'DB': 1,
+                    'PASSWORD': config['redis']['password'],
+                    'PARSER_CLASS': 'redis.connection.HiredisParser'
+                },
+            },
+        }
+
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
