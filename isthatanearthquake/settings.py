@@ -22,6 +22,12 @@ if socket.gethostname() == 'adam-air' or socket.gethostname() == 'TWC101037.loca
             'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
         }
     }
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'unique-snowflake'
+        },
+    }
 elif socket.gethostname() == 'adam-air2':
     DATABASES = {
         'default': {
