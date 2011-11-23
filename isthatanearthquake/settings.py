@@ -11,7 +11,7 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-if socket.gethostname() == 'adam-air':
+if socket.gethostname() == 'adam-air' or socket.gethostname() == 'TWC101037.local':
     DATABASES = {
         'default': {
             'ENGINE': 'django.contrib.gis.db.backends.postgis', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
